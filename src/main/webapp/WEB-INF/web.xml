@@ -1,0 +1,21 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+	<display-name>Simple Secure Application</display-name>
+
+	<!-- ==== Servlets ================================================================== -->
+	<servlet>
+		<servlet-name>master</servlet-name>
+		<servlet-class>org.meri.simpleshirosecuredapplication.servlet.MasterServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<!-- ==== Servlets Mapping ========================================================== -->
+    <servlet-mapping>
+        <servlet-name>master</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+
+</web-app>
