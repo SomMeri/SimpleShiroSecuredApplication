@@ -7,15 +7,19 @@
 
 	<!-- ==== Servlets ================================================================== -->
 	<servlet>
-		<servlet-name>master</servlet-name>
-		<servlet-class>org.meri.simpleshirosecuredapplication.servlet.MasterServlet</servlet-class>
+		<servlet-name>PerformFunctionAndGoBackServlet</servlet-name>
+		<servlet-class>org.meri.simpleshirosecuredapplication.servlet.PerformFunctionAndGoBackServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<!-- ==== Servlets Mapping ========================================================== -->
-    <servlet-mapping>
-        <servlet-name>master</servlet-name>
-        <url-pattern>/*</url-pattern>
-    </servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PerformFunctionAndGoBackServlet</servlet-name>
+		<url-pattern>/simpleshirosecuredapplication/masterservlet</url-pattern>
+	</servlet-mapping>
+
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
 
 </web-app>
