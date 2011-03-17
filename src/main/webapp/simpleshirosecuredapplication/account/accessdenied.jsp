@@ -4,10 +4,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Personal Account</title>
+<title>Access Denied</title>
 </head>
 <body>
-<%@include file="/simpleshirosecuredapplication/common/commonformstuff.jsp" %>
-This page should contain personal data. Since we have no users now, it has no data. 
+Sorry, you do not have access rights to that area.
 </body>
 </html>

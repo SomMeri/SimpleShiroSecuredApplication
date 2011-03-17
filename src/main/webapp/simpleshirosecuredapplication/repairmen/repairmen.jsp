@@ -4,15 +4,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Repairmans Page</title>
+<title>Repairmen Page</title>
 </head>
 <body>
 <%@page import="org.meri.simpleshirosecuredapplication.actions.Actions"%>
 
 <form action="/simpleshirosecuredapplication/masterservlet" method="get">
 <%@include file="/simpleshirosecuredapplication/common/commonformstuff.jsp" %>
-<h2>Repairmans Page</h2>
-This page is meant for repairmans only. If you are not one, please go away. Available functions:
+<h2>Repairmen Page</h2>
+This page is meant for repairmen only. If you are not one, please go away. Available functions:
     <table class="sample">
         <thead>
         <tr>

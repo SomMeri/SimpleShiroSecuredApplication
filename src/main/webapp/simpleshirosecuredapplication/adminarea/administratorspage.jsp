@@ -22,8 +22,8 @@ This page is meant for administrators only. If you are not one, please go away. 
         </thead>
         <tbody>
         <tr>
-            <td>Manage Repairmans: </td>
-            <td><button type="submit" name="action" value="<%=Actions.MANAGE_REPAIRMANS.getName()%>">Do It</button></td>
+            <td>Manage Repairmen: </td>
+            <td><button type="submit" name="action" value="<%=Actions.MANAGE_REPAIRMEN.getName()%>">Do It</button></td>
         </tr>
         <tr>
             <td>Manage Sales: </td>

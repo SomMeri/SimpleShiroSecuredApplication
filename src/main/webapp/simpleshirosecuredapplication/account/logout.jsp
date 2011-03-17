@@ -4,10 +4,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Personal Account</title>
+<title>Logout</title>
 </head>
 <body>
 <%@include file="/simpleshirosecuredapplication/common/commonformstuff.jsp" %>
-This page should contain personal data. Since we have no users now, it has no data. 
+<%@ page import="org.apache.shiro.SecurityUtils" %>
+<% SecurityUtils.getSubject().logout();%>
+<p>You have successfully logged out. 
 </body>
 </html>
