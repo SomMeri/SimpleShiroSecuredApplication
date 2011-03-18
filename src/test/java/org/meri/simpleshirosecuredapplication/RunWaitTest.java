@@ -8,7 +8,6 @@ import org.meri.simpleshirosecuredapplication.test.AbstractContainerTest;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 
-
 public class RunWaitTest extends AbstractContainerTest {
 
     @Test
