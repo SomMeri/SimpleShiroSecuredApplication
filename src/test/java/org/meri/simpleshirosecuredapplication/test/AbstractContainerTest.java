@@ -18,8 +18,8 @@
  */
 package org.meri.simpleshirosecuredapplication.test;
 
-import com.gargoylesoftware.htmlunit.WebClient;
 import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.mortbay.jetty.Connector;
@@ -27,6 +27,8 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.nio.SelectChannelConnector;
 import org.mortbay.jetty.security.SslSocketConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
+
+import com.gargoylesoftware.htmlunit.WebClient;
 
 public abstract class AbstractContainerTest {
     protected static PauseableServer server;
@@ -37,25 +39,53 @@ public abstract class AbstractContainerTest {
     protected static final String BASEURI = "http://localhost:" + port + "/";
 
     protected final WebClient webClient = new WebClient();
+    
+    private static String[] configurationClasses =
+    {
+    	"org.mortbay.jetty.webapp.JettyWebXmlConfiguration",
+    	"org.mortbay.jetty.webapp.WebInfConfiguration",
+    	"org.mortbay.jetty.plus.webapp.EnvConfiguration",
+    	"org.mortbay.jetty.plus.webapp.Configuration",
+    	"org.mortbay.jetty.webapp.TagLibConfiguration"
+    } ; 
+
 
     @BeforeClass
     public static void startContainer() throws Exception {
         if (server == null) {
             server = new PauseableServer();
-            Connector connector = new SelectChannelConnector();
-            connector.setPort(port);
-
-            SslSocketConnector sslConnector = new SslSocketConnector();
-            sslConnector.setPort(sslPort);
-            sslConnector.setKeyPassword("secret");
-            sslConnector.setKeystore("src/test/resources/keystore");
-            sslConnector.setPassword("secret");
-
+            Connector connector = createHttpConnector();
+            SslSocketConnector sslConnector = createSslConnector();
             server.setConnectors(new Connector[]{connector, sslConnector});
-            server.setHandler(new WebAppContext("src/main/webapp", "/"));
+            
+            WebAppContext context = createWebAppContext();
+						server.setHandler(context);
+						
             server.start();
             assertTrue(server.isStarted());
         }
+    }
+
+		private static WebAppContext createWebAppContext() {
+	    WebAppContext context = new WebAppContext("src/main/webapp", "/");
+	    context.setConfigurationClasses(configurationClasses);
+	    
+	    return context;
+    }
+
+		private static SslSocketConnector createSslConnector() {
+	    SslSocketConnector sslConnector = new SslSocketConnector();
+	    sslConnector.setPort(sslPort);
+	    sslConnector.setKeyPassword("secret");
+	    sslConnector.setKeystore("src/test/resources/keystore");
+	    sslConnector.setPassword("secret");
+	    return sslConnector;
+    }
+
+		private static Connector createHttpConnector() {
+	    Connector connector = new SelectChannelConnector();
+	    connector.setPort(port);
+	    return connector;
     }
 
     @Before

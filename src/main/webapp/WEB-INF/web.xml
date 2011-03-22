@@ -2,7 +2,7 @@
  "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
-<web-app>
+<web-app id="SimpleShiroSecuredApplication">
 	<display-name>Simple Secure Application</display-name>
 
 	<!-- ==== Servlets ================================================================== -->
@@ -38,4 +38,29 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
+	<!-- ==== Initialize Database on Startup ========================================================== -->
+	
+	<!-- reference to data source -->
+	<resource-ref>
+		<description>Derby Connection</description>
+		<res-ref-name>jdbc/SimpleShiroSecuredApplicationDB</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Container</res-auth>
+	</resource-ref>
+
+	<!-- liquibase configuration -->
+	<context-param>
+		<param-name>liquibase.changelog</param-name>
+		<param-value>src/main/resources/db.changelog.xml</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>liquibase.datasource</param-name>
+		<param-value>jdbc/SimpleShiroSecuredApplicationDB</param-value>
+	</context-param>
+
+	<!-- liquibase sevlet listener to check database on start up and apply new changes if needed -->
+	<listener>
+		<listener-class>liquibase.integration.servlet.LiquibaseServletListener</listener-class>
+	</listener>
 </web-app>
