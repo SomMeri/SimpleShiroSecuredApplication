@@ -9,12 +9,10 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
-import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.realm.jdbc.JdbcRealm;
@@ -23,120 +21,115 @@ import org.apache.shiro.util.SimpleByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This realm has all {@link JdbcRealm} capabilities. It also supports JNDI as datasource source and 
+ * can add salt to passwords.
+ */
 public class JNDIAndSaltAwareJdbcRealm extends JdbcRealm {
 
-    private static final Logger log = LoggerFactory.getLogger(JNDIAndSaltAwareJdbcRealm.class);
-    
-    protected String jndiDataSourceName;
+	private static final Logger log = LoggerFactory.getLogger(JNDIAndSaltAwareJdbcRealm.class);
 
-    @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        UsernamePasswordToken upToken = (UsernamePasswordToken) token;
-        String username = upToken.getUsername();
+	protected String jndiDataSourceName;
 
-        // Null username is invalid
-        if (username == null) {
-            throw new AccountException("Null usernames are not allowed by this realm.");
-        }
+	public JNDIAndSaltAwareJdbcRealm() {
+		setPermissionsLookupEnabled(true);
+	}
 
-        Connection conn = null;
-        AuthenticationInfo info = null;
-        try {
-            conn = dataSource.getConnection();
+	public String getJndiDataSourceName() {
+		return jndiDataSourceName;
+	}
 
-            PasswdSalt passwdSalt = getPasswordForUser(conn, username);
+	public void setJndiDataSourceName(String jndiDataSourceName) {
+		this.jndiDataSourceName = jndiDataSourceName;
+		this.dataSource = getDataSourceFromJNDI(jndiDataSourceName);
+	}
 
-            if (passwdSalt == null) {
-                throw new UnknownAccountException("No account found for user [" + username + "]");
-            }
+	private DataSource getDataSourceFromJNDI(String jndiDataSourceName) {
+		try {
+			InitialContext ic = new InitialContext();
+			return (DataSource) ic.lookup(jndiDataSourceName);
+		} catch (NamingException e) {
+			log.error("JNDI error while retrieving " + jndiDataSourceName, e);
+			throw new AuthorizationException(e);
+		}
+	}
 
-            SimpleAuthenticationInfo saInfo = new SimpleAuthenticationInfo(username, passwdSalt.password, getName());
-            saInfo.setCredentialsSalt(new SimpleByteSource(passwdSalt.salt));
+	@Override
+	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+		//identify account to log to
+		UsernamePasswordToken userPassToken = (UsernamePasswordToken) token;
+		String username = userPassToken.getUsername();
 
-            info = saInfo;
+		if (username == null) {
+			log.debug("Username is null.");
+			return null;
+		}
 
-        } catch (SQLException e) {
-            final String message = "There was a SQL error while authenticating user [" + username + "]";
-            if (log.isErrorEnabled()) {
-                log.error(message, e);
-            }
+		// read password hash and salt from db 
+		PasswdSalt passwdSalt = getPasswordForUser(username);
 
-            // Rethrow any SQL errors as an authentication exception
-            throw new AuthenticationException(message, e);
-        } finally {
-            JdbcUtils.closeConnection(conn);
-        }
+		if (passwdSalt == null) {
+			log.debug("No account found for user [" + username + "]");
+			return null;
+		}
 
-        return info;
-    }
+		// return salted credentials
+		SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(username, passwdSalt.password, getName());
+		info.setCredentialsSalt(new SimpleByteSource(passwdSalt.salt));
 
-    private PasswdSalt getPasswordForUser(Connection conn, String username) throws SQLException {
+		return info;
+	}
 
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        String password = null;
-        String salt = null;
-        try {
-            ps = conn.prepareStatement(authenticationQuery);
-            ps.setString(1, username);
+	private PasswdSalt getPasswordForUser(String username) {
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		Connection conn = null;
+		try {
+			conn = dataSource.getConnection();
+			statement = conn.prepareStatement(authenticationQuery);
+			statement.setString(1, username);
 
-            // Execute query
-            rs = ps.executeQuery();
+			resultSet = statement.executeQuery();
 
-            // Loop over results - although we are only expecting one result, since usernames should be unique
-            boolean foundResult = false;
-            while (rs.next()) {
+			boolean hasAccount = resultSet.next();
+			if (!hasAccount)
+				return null;
 
-                // Check to ensure only one row is processed
-                if (foundResult) {
-                    throw new AuthenticationException("More than one user row found for user [" + username + "]. Usernames must be unique.");
-                }
+			String salt = null;
+			String password = resultSet.getString(1);
+			if (resultSet.getMetaData().getColumnCount() > 1)
+				salt = resultSet.getString(2);
 
-                password = rs.getString(1);
-                if (rs.getMetaData().getColumnCount()>1)
-                	salt = rs.getString(2);
+			if (resultSet.next()) {
+				throw new AuthenticationException("More than one user row found for user [" + username + "]. Usernames must be unique.");
+			}
 
-                foundResult = true;
-            }
-        } finally {
-            JdbcUtils.closeResultSet(rs);
-            JdbcUtils.closeStatement(ps);
-        }
+			return new PasswdSalt(password, salt);
+		} catch (SQLException e) {
+			final String message = "There was a SQL error while authenticating user [" + username + "]";
+			if (log.isErrorEnabled()) {
+				log.error(message, e);
+			}
+			throw new AuthenticationException(message, e);
+			
+		} finally {
+			JdbcUtils.closeResultSet(resultSet);
+			JdbcUtils.closeStatement(statement);
+			JdbcUtils.closeConnection(conn);
+		}
+	}
 
-        return new PasswdSalt(password, salt);
-    }
-
-		public String getJndiDataSourceName() {
-    	return jndiDataSourceName;
-    }
-
-		public void setJndiDataSourceName(String jndiDataSourceName) {
-    	this.jndiDataSourceName = jndiDataSourceName;
-    	this.dataSource =	getDataSourceFromJNDI(jndiDataSourceName);
-    }
-
-		private DataSource getDataSourceFromJNDI(String jndiDataSourceName) {
-      try {
-	      InitialContext ic = new InitialContext();
-	      return (DataSource) ic.lookup(jndiDataSourceName);
-      } catch (NamingException e) {
-        log.error("JNDI error while retrieving " + jndiDataSourceName, e);
-      	throw new AuthorizationException(e);
-      }   
-    }
-
-   
 }
 
 class PasswdSalt {
 
 	public String password;
 	public String salt;
-	
+
 	public PasswdSalt(String password, String salt) {
-	  super();
-	  this.password = password;
-	  this.salt = salt;
-  }
-	
+		super();
+		this.password = password;
+		this.salt = salt;
+	}
+
 }
