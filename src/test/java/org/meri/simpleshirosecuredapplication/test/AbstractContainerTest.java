@@ -78,7 +78,12 @@ public abstract class AbstractContainerTest {
 	    sslConnector.setPort(sslPort);
 	    sslConnector.setKeyPassword("secret");
 	    sslConnector.setKeystore("src/test/resources/keystore");
+	    sslConnector.setTrustPassword("secret");
+	    sslConnector.setTruststore("src/main/resources/truststore");
 	    sslConnector.setPassword("secret");
+	    sslConnector.setWantClientAuth(true);
+	    //sslConnector.setNeedClientAuth(true);
+	    
 	    return sslConnector;
     }
 
