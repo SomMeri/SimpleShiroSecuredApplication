@@ -8,7 +8,14 @@
 </head>
 <body>
 <%@include file="/simpleshirosecuredapplication/common/commonformstuff.jsp" %>
-<form name="loginform" action="" method="post">
+<%
+  String errorDescription = (String) request.getAttribute("simpleShiroApplicationLoginFailure");
+  if (errorDescription!=null) {
+%>
+Login attempt was unsuccessful: <%=errorDescription%>
+<%
+  }
+%><form name="loginform" action="" method="post">
     <table align="left" border="0" cellspacing="0" cellpadding="3">
         <tr>
             <td>Username:</td>
