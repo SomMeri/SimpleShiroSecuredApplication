@@ -14,15 +14,7 @@ public class CertificateOrFormAuthenticationFilter extends FormAuthenticationFil
 
 	@Override
 	protected boolean isLoginSubmission(ServletRequest request, ServletResponse response) {
-		return super.isLoginSubmission(request, response) || isCertificateLogInAttempt(request, response);
-	}
-
-	private boolean isCertificateLogInAttempt(ServletRequest request, ServletResponse response) {
-		return hasCertificate(request) && !getSubject(request, response).isAuthenticated();
-	}
-
-	private boolean hasCertificate(ServletRequest request) {
-		return null != getCertificate(request);
+		return super.isLoginSubmission(request, response);
 	}
 
 	private X509Certificate getCertificate(ServletRequest request) {
