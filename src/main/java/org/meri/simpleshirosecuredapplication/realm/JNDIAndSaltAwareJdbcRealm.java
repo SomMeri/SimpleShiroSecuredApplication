@@ -32,7 +32,6 @@ public class JNDIAndSaltAwareJdbcRealm extends JdbcRealm {
 	protected String jndiDataSourceName;
 
 	public JNDIAndSaltAwareJdbcRealm() {
-		setPermissionsLookupEnabled(true);
 	}
 
 	public String getJndiDataSourceName() {
