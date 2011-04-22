@@ -104,6 +104,13 @@
 			<artifactId>standard</artifactId>
 			<version>1.1.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.openjpa</groupId>
+			<artifactId>apache-openjpa</artifactId>
+			<version>2.1.0</version>
+			<type>pom</type>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

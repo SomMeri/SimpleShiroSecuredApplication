@@ -1,0 +1,15 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0">
+	<persistence-unit name="SimpleShiroSecuredApplicationPU"
+		transaction-type="RESOURCE_LOCAL">
+		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl
+		</provider>
+		<non-jta-data-source>jdbc/SimpleShiroSecuredApplicationDB
+		</non-jta-data-source>
+		<class>org.meri.simpleshirosecuredapplication.model.UserPersonalData
+		</class>
+		<properties>
+			<property name="openjpa.RuntimeUnenhancedClasses" value="supported" />
+		</properties>
+	</persistence-unit>
+</persistence>

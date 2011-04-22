@@ -28,10 +28,10 @@ public class PerformFunctionAndGoBackServlet extends HttpServlet implements Serv
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
 		String actionResult = performAction(action);
-		request.setAttribute("actionResultMessage", actionResult);
+		request.setAttribute(ServletConstants.actionResultMessage, actionResult);
 
 		// forward the request and response back to original page
-		String originalPage = request.getParameter("originalPage");
+		String originalPage = request.getParameter(ServletConstants.originalPage);
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(originalPage);
 		dispatcher.forward(request, response);
 	}

@@ -220,4 +220,28 @@
 		</update>
 	</changeSet>
 
+	<changeSet id="5" author="meri">
+		<comment>
+			Add user personal data such as first name, last name, hobby etc to the application.
+		</comment>
+		<createTable tableName="user_personal_data">
+			<column name="user_name" type="varchar(150)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="firstname" type="varchar(1500)">
+				<constraints nullable="true" />
+			</column>
+			<column name="lastname" type="varchar(1500)">
+				<constraints nullable="true" />
+			</column>
+			<column name="about" type="varchar(5000)">
+				<constraints nullable="true" />
+			</column>
+		</createTable>
+		
+		<addForeignKeyConstraint constraintName="fk_user_data_users"
+			baseTableName="user_personal_data" baseColumnNames="user_name"
+			referencedTableName="sec_users" referencedColumnNames="name" />
+		
+	</changeSet>
 </databaseChangeLog>

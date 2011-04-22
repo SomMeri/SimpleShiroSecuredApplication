@@ -12,10 +12,20 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
+	<servlet>
+		<servlet-name>AccountPageServlet</servlet-name>
+		<servlet-class>org.meri.simpleshirosecuredapplication.servlet.AccountPageServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 	<!-- ==== Servlets Mapping ========================================================== -->
 	<servlet-mapping>
 		<servlet-name>PerformFunctionAndGoBackServlet</servlet-name>
 		<url-pattern>/simpleshirosecuredapplication/masterservlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>AccountPageServlet</servlet-name>
+		<url-pattern>/simpleshirosecuredapplication/accountpageservlet</url-pattern>
 	</servlet-mapping>
 
 	<welcome-file-list>
@@ -64,4 +74,9 @@
 		<listener>
 			<listener-class>liquibase.integration.servlet.LiquibaseServletListener</listener-class>
 		</listener>
+		
+		<persistence-unit-ref>
+                <persistence-unit-ref-name>persistence/SimpleShiroSecuredApplicationPU</persistence-unit-ref-name>
+                <persistence-unit-name>SimpleShiroSecuredApplicationPU</persistence-unit-name>
+        </persistence-unit-ref> 
 </web-app>

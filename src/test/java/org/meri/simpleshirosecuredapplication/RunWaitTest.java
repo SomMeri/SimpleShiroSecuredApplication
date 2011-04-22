@@ -10,10 +10,10 @@ import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 
 public class RunWaitTest extends AbstractContainerTest {
 
-    @Test
-    public void sleepForever() throws FailingHttpStatusCodeException, MalformedURLException, IOException, InterruptedException {
-    	while (true)
-    		Thread.sleep(9999);
-    }
+	@Test
+	public void sleepForever() throws FailingHttpStatusCodeException, MalformedURLException, IOException, InterruptedException {
+		while (true)
+			Thread.sleep(9999);
+	}
 
 }
