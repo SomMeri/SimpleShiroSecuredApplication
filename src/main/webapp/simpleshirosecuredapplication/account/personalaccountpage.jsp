@@ -1,4 +1,3 @@
-<%@page import="org.apache.shiro.SecurityUtils"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -16,11 +15,10 @@ label {
 </head>
 <body>
 <form action="/simpleshirosecuredapplication/accountpageservlet" method="get">
-<%@include
-	file="/simpleshirosecuredapplication/common/commonformstuff.jsp"%>
+<%@page import="org.apache.shiro.SecurityUtils"%>
+<%@include file="/simpleshirosecuredapplication/common/commonformstuff.jsp"%>
 <%@ page import="org.meri.simpleshirosecuredapplication.model.ModelProvider"%>
-<%@ page
-	import="org.meri.simpleshirosecuredapplication.model.UserPersonalData"%>
+<%@ page import="org.meri.simpleshirosecuredapplication.model.UserPersonalData"%>
 <%
 ModelProvider mp = new ModelProvider();
 UserPersonalData loggedUserData = mp.getCurrentUserData();
@@ -34,7 +32,7 @@ Hi <%=loggedUser%>. You can edit all your data here. <br>
 <br>
 <label>First Name:</label><input type="text" name="firstname" value="<%=firstname%>" size="20" /><br>
 <label>Last Name:</label> <input type="text" name="lastname" value="<%=lastname%>" size="20" /><br>
-<label>About:</label><textarea rows="10" cols="20" name="about"><% if (about!=null) { out.println( about); }%>
+<label>About:</label><textarea rows="10" cols="20" name="about"><%=about%>
 </textarea><br>
 <label>&nbsp;</label><button type="submit" name="save" value="save">Save</button>
 </form>

@@ -1,8 +1,11 @@
 package org.meri.simpleshirosecuredapplication.model;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 
 import org.apache.shiro.SecurityUtils;
 
@@ -11,6 +14,8 @@ public class ModelProvider {
 	private EntityManager em;
 	
 	/**
+	 * Find data about logged user.
+	 * 
 	 * @return current user data from database. If there is no such line, return null.
 	 */
 	public UserPersonalData getCurrentUserData() {
@@ -18,6 +23,17 @@ public class ModelProvider {
 		String loggedUser = (String)SecurityUtils.getSubject().getPrincipal();
 		UserPersonalData loggedUserData = em.find(UserPersonalData.class, loggedUser);
 		return loggedUserData;
+	}
+	
+	/**
+	 * Find data about all users.
+	 * 
+	 * @return users data from database. 
+	 */	public List<UserPersonalData> getAllUsersData() {
+		EntityManager em = getEntityManager();
+		TypedQuery<UserPersonalData> query = em.createQuery("SELECT x FROM UserPersonalData x",UserPersonalData.class);
+		List<UserPersonalData> result = query.getResultList();
+		return result;
 	}
 
 	private EntityManager getEntityManager() {

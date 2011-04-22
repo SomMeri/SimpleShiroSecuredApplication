@@ -7,6 +7,7 @@
 <title>Access Denied</title>
 </head>
 <body>
+<%@include file="/simpleshirosecuredapplication/common/commonformstuff.jsp" %>
 Sorry, you do not have access rights to that area.
 </body>
 </html>
