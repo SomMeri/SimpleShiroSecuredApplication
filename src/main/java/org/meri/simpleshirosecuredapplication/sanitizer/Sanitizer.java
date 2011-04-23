@@ -9,7 +9,6 @@ import org.owasp.validator.html.PolicyException;
 import org.owasp.validator.html.ScanException;
 /**
  * Sanitize user input into XSS attack safe string. The class is thread safe. 
- *
  */
 public class Sanitizer {
 
