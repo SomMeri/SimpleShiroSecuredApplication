@@ -14,7 +14,7 @@ label {
 <title>Personal Account</title>
 </head>
 <body>
-<form action="/simpleshirosecuredapplication/accountpageservlet" method="get">
+<form action="/simpleshirosecuredapplication/accountpageservlet" method="post">
 <%@page import="org.apache.shiro.SecurityUtils"%>
 <%@include file="/simpleshirosecuredapplication/common/commonformstuff.jsp"%>
 <%@ page import="org.meri.simpleshirosecuredapplication.model.ModelProvider"%>
@@ -32,8 +32,7 @@ Hi <%=loggedUser%>. You can edit all your data here. <br>
 <br>
 <label>First Name:</label><input type="text" name="firstname" value="<%=firstname%>" size="20" /><br>
 <label>Last Name:</label> <input type="text" name="lastname" value="<%=lastname%>" size="20" /><br>
-<label>About:</label><textarea rows="10" cols="20" name="about"><%=about%>
-</textarea><br>
+<label>About:</label><textarea rows="10" cols="20" name="about"><%=about%></textarea><br>
 <label>&nbsp;</label><button type="submit" name="save" value="save">Save</button>
 </form>
 
