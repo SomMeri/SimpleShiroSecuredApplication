@@ -9,7 +9,7 @@ import org.owasp.appsensor.ASUser;
 import org.owasp.appsensor.ASUtilities;
 
 public class ShiroASUtilities implements ASUtilities {
-
+	
 	private final IntrusionDetectionLoggerLog logger = new IntrusionDetectionLoggerLog();
 	
 	@Override
@@ -25,11 +25,9 @@ public class ShiroASUtilities implements ASUtilities {
 		return logger;
 	}
 
-	@Override
 	public HttpServletRequest getCurrentRequest() {
-		// reference implementation: return ESAPI.httpUtilities().getCurrentRequest();
-		// leave it unimplemented for now
-		throw new UnsupportedOperationException("Not implemented yet.");
+		HttpServletRequest request = AppSensorIntegrationThreadContext.getCurrentRequest();
+		return request;
 	}
 
 }
