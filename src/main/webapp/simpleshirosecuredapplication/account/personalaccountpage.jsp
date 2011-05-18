@@ -26,7 +26,7 @@ mp.close();
 String loggedUser = (String)SecurityUtils.getSubject().getPrincipal();
 String firstname = loggedUserData==null || loggedUserData.getFirstname() == null? "" : loggedUserData.getFirstname();
 String lastname = loggedUserData==null || loggedUserData.getLastname() == null? "" : loggedUserData.getLastname();
-String about = loggedUserData==null ? null : loggedUserData.getAbout();
+String about = loggedUserData==null || loggedUserData.getAbout()==null ? "" : loggedUserData.getAbout();
 %>
 Hi <%=loggedUser%>. You can edit all your data here. <br>
 <br>
