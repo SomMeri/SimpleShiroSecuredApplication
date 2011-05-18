@@ -10,8 +10,8 @@ import org.owasp.appsensor.ASUtilities;
 
 public class ShiroASUtilities implements ASUtilities {
 	
-	private final IntrusionDetectionLoggerLog logger = new IntrusionDetectionLoggerLog();
-	
+	private final IntrusionDetectionLogger logger = new IntrusionDetectionLogger();
+
 	@Override
 	public ASUser getCurrentUser() {
 		//acquire logged user from Shiro framework

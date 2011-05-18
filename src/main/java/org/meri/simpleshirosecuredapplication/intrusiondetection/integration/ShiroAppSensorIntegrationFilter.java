@@ -8,6 +8,7 @@ import org.apache.shiro.web.servlet.AdviceFilter;
 
 public class ShiroAppSensorIntegrationFilter extends AdviceFilter {
 
+	@Override
 	protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
 		AppSensorIntegrationThreadContext.remove();
 		AppSensorIntegrationThreadContext.setCurrentRequest((HttpServletRequest)request);

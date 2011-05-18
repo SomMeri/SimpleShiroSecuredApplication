@@ -4,9 +4,9 @@ import org.owasp.appsensor.ASLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class IntrusionDetectionLoggerLog implements ASLogger {
+public class IntrusionDetectionLogger implements ASLogger {
 
-  private static final Logger log = LoggerFactory.getLogger(IntrusionDetectionLoggerLog.class);
+  private static final Logger log = LoggerFactory.getLogger(IntrusionDetectionLogger.class);
 
 	@Override
   public void fatal(String message) {

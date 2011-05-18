@@ -1,6 +1,8 @@
 package org.meri.simpleshirosecuredapplication.intrusiondetection.integration;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.owasp.appsensor.ASUser;
 
@@ -46,11 +48,24 @@ public class ShiroASUser implements ASUser {
 
 	@Override
 	public void disable() {
-		throw new UnsupportedOperationException("Not implemeted yet.");
+		SecurityManager securityManager = SecurityUtils.getSecurityManager();
+		
+		if (securityManager instanceof DisablingSecurityManager) {
+			DisablingSecurityManager disablingManager =  (DisablingSecurityManager) securityManager;
+			disablingManager.disable(subject);
+		}
+
+		subject.logout();
 	}
 
 	@Override
 	public boolean isEnabled() {
+		SecurityManager securityManager = SecurityUtils.getSecurityManager();
+		
+		if (securityManager instanceof DisablingSecurityManager) {
+			DisablingSecurityManager disablingManager =  (DisablingSecurityManager) securityManager;
+			return disablingManager.isDisabled(subject);
+		}
 		return true;
 	}
 
