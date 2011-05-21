@@ -102,7 +102,7 @@ public abstract class AppSensorIntegrationThreadContext {
    * @return the object unbound or <tt>null</tt> if there was nothing bound
    *         under the specified <tt>key</tt> name.
    */
-  public static Object remove(Object key) {
+  private static Object remove(Object key) {
       Object value = resources.get().remove(key);
 
       if ((value != null) && log.isTraceEnabled()) {
@@ -122,7 +122,7 @@ public abstract class AppSensorIntegrationThreadContext {
    *
    * @since 1.0
    */
-  public static void remove() {
+  public static void clearAll() {
       resources.remove();
   }
 

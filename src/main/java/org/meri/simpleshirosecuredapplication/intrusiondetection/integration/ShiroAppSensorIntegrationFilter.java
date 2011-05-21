@@ -10,7 +10,7 @@ public class ShiroAppSensorIntegrationFilter extends AdviceFilter {
 
 	@Override
 	protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
-		AppSensorIntegrationThreadContext.remove();
+		AppSensorIntegrationThreadContext.clearAll();
 		AppSensorIntegrationThreadContext.setCurrentRequest((HttpServletRequest)request);
 		return true;
 	}
