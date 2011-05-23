@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.apache.shiro.ShiroException;
 import org.meri.simpleshirosecuredapplication.actions.Actions;
+import org.meri.simpleshirosecuredapplication.intrusiondetection.detectionpoints.NonExistingActionRequested;
 
 public class PerformFunctionAndGoBackServlet extends HttpServlet implements Servlet {
 	
@@ -39,6 +40,8 @@ public class PerformFunctionAndGoBackServlet extends HttpServlet implements Serv
 	private String performAction(String actionName) {
 		try {
 			Actions action = findAction(actionName);
+			actionExistsIntrusionDetectionPoint(actionName, action);
+				
 			String result = action == null ? null : action.doIt();
 			log.debug("Performed function with result: " + result);
 			return result;
@@ -47,6 +50,12 @@ public class PerformFunctionAndGoBackServlet extends HttpServlet implements Serv
 			return "Error: " + ex.getMessage();
 		}
 	}
+
+	private void actionExistsIntrusionDetectionPoint(String actionName, Actions action) {
+	  //intrusion detection point
+	  if (action==null)
+	  	new NonExistingActionRequested(actionName);
+  }
 
 	private Actions findAction(String actionName) {
 		if (actionName == null)

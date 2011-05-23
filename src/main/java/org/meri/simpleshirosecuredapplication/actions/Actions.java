@@ -2,6 +2,7 @@ package org.meri.simpleshirosecuredapplication.actions;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.UnauthorizedException;
+import org.meri.simpleshirosecuredapplication.intrusiondetection.detectionpoints.ActionNotPermittedException;
 
 public enum Actions {
 
@@ -14,6 +15,9 @@ public enum Actions {
 		String neededPermission = getNeededPermission();
 		if (SecurityUtils.getSubject().isPermitted(neededPermission))
 			return "Function " + getName() + " run succesfully.";
+
+		//AppSensor detection point
+		new ActionNotPermittedException(this);
 		
 		throw new UnauthorizedException("Logged user does not have " + neededPermission + " permission");
 	}

@@ -1,4 +1,4 @@
-package org.meri.simpleshirosecuredapplication.intrusiondetection.integration;
+package org.meri.simpleshirosecuredapplication.mgt;
 
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.mgt.SecurityManager;

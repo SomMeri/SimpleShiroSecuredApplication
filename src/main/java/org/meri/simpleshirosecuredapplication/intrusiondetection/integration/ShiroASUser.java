@@ -4,6 +4,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
+import org.meri.simpleshirosecuredapplication.mgt.DisablingSecurityManager;
 import org.owasp.appsensor.ASUser;
 
 public class ShiroASUser implements ASUser {

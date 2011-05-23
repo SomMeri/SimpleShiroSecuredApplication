@@ -1,4 +1,4 @@
-package org.meri.simpleshirosecuredapplication.intrusiondetection.integration;
+package org.meri.simpleshirosecuredapplication.mgt;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;

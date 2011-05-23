@@ -32,10 +32,10 @@ public class AccountPageServlet extends AbstractFieldsHandlingServlet {
 
 		try {
 			saveData(loggedPrincipal, firstname, lastname, about);
-			request.setAttribute(ServletConstants.actionResultMessage, "Saved was successful.");
+			request.setAttribute(ServletConstants.actionResultMessage, "Save was successful.");
 		} catch (Exception ex) {
 			log.error("Could not save data.", ex);
-			request.setAttribute(ServletConstants.actionResultMessage, "Saved unsuccessful :(.");
+			request.setAttribute(ServletConstants.actionResultMessage, "Save unsuccessful :(.");
 		}
 
 		// forward the request and response back to original page
