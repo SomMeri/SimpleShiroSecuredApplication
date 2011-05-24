@@ -15,9 +15,9 @@ import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("serial")
 public class AccountPageServlet extends AbstractFieldsHandlingServlet {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(AccountPageServlet.class);
-	
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		doPost(req, resp);
@@ -25,13 +25,12 @@ public class AccountPageServlet extends AbstractFieldsHandlingServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String loggedPrincipal = (String) SecurityUtils.getSubject().getPrincipal();
-		String firstname = getField(request, "firstname");
-		String lastname = getField(request, "lastname");
-		String about = getField(request, "about");
-
 		try {
-			saveData(loggedPrincipal, firstname, lastname, about);
+			String firstname = getField(request, "firstname");
+			String lastname = getField(request, "lastname");
+			String about = getField(request, "about");
+
+			saveData(firstname, lastname, about);
 			request.setAttribute(ServletConstants.actionResultMessage, "Save was successful.");
 		} catch (Exception ex) {
 			log.error("Could not save data.", ex);
@@ -44,7 +43,11 @@ public class AccountPageServlet extends AbstractFieldsHandlingServlet {
 		dispatcher.forward(request, response);
 	}
 
-	private void saveData(String loggedPrincipal, String firstname, String lastname, String about) {
+	private void saveData(String firstname, String lastname, String about) {
+		String loggedPrincipal = (String) SecurityUtils.getSubject().getPrincipal();
+		if (loggedPrincipal==null)
+			throw new UserMustBeLoggedException();
+			
 		ModelProvider mp = new ModelProvider();
 		try {
 			UserPersonalData data = mp.getCurrentUserData();
