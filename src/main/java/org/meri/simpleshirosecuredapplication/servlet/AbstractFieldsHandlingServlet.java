@@ -34,8 +34,8 @@ public abstract class AbstractFieldsHandlingServlet extends HttpServlet {
 		String dirtyValue = request.getParameter(parameter);
 
 		// detection point: XSS, SQL injection
-	  AttackDetectorUtils.verifySQLInjectionAttack(dirtyValue);
-	  AttackDetectorUtils.verifyXSSAttack(dirtyValue);
+		AttackDetectorUtils.verifySQLInjectionAttack(dirtyValue);
+		AttackDetectorUtils.verifyXSSAttack(dirtyValue);
 
 		return sanitizer.sanitize(dirtyValue);
 	}
